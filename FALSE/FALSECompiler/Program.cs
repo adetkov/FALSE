@@ -12,11 +12,11 @@ namespace FALSECompiler
 	{
 		static void Main(string[] args)
 		{
-		    var program = @"100 100";
+		    var program = @"100 200+50-_.^";
 		    var tokens = Lexer.Tokenize(program);
 		    var c = new Compiler();
-            c.Compile("Debug", 1024, new ProgramContext(tokens));
-		    Process.Start("Debug.exe");
+            c.Compile("Debug1", 1024, new ProgramContext(tokens));
+		    Process.Start("Debug1.exe");
 		}
 	}
 }

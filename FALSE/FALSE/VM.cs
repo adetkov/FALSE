@@ -33,7 +33,7 @@ namespace FALSE
             _funcTable.Add(OpCode.Gt, (cx, c, s) => s.Push(s.Pop() > s.Pop() ? -1 : 0));
             _funcTable.Add(OpCode.And, (cx, c, s) => s.Push(s.Pop() & s.Pop()));
             _funcTable.Add(OpCode.Or, (cx, c, s) => s.Push(s.Pop() | s.Pop()));
-            _funcTable.Add(OpCode.Inv, (cx, c, s) => s.Push(s.Pop() ^ (-1)));
+            _funcTable.Add(OpCode.Not, (cx, c, s) => s.Push(s.Pop() ^ (-1)));
 
             _funcTable.Add(OpCode.Dup, (cx, c, s) => s.Dup());
             _funcTable.Add(OpCode.Drop, (cx, c, s) => s.Pop());

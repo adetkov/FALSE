@@ -1,22 +1,32 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-
-namespace FALSECompiler
+﻿namespace FALSECompiler
 {
     public class ILCode
     {
         public enum ILType
         {
-            PopStack,
-            PushStack,
+            PopStack, // +
+            PushStack, // +
             
-            LoadNumber,
-            WriteLine,
-            WriteNumber,
+            LoadNumber, // +
+            WriteLine, // +
+            WriteNumber, // +
             WriteChar,
-            ReadChar,
+            ReadChar, // +
+            
+            Negate, // +
+            Add, // +
+            Sub, // +
+            Mul, // +
+            Div, // +
+
+            Not, // +
+            Equal,
+            And,
+            Or,
+            Greater,
+
+            Duplicate,
+            Drop
         }
         
         public ILCode(ILType type, object tag = null)

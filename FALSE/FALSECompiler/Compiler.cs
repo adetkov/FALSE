@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
 using System.Reflection.Emit;
-using System.Text;
 
 namespace FALSECompiler
 {
@@ -28,6 +26,21 @@ namespace FALSECompiler
                     { ILCode.ILType.WriteLine, WriteString },
                     { ILCode.ILType.WriteNumber, WriteNumber },
                     { ILCode.ILType.ReadChar, ReadChar },
+
+                    { ILCode.ILType.Negate, Negate },
+                    { ILCode.ILType.Add, Add },
+                    { ILCode.ILType.Sub, Substract },
+                    { ILCode.ILType.Mul, Multiplicate },
+                    { ILCode.ILType.Div, Divide },
+
+                    { ILCode.ILType.Not, Not },
+                    { ILCode.ILType.Equal, Equal },
+                    { ILCode.ILType.And, And },
+                    { ILCode.ILType.Or, Or },
+                    { ILCode.ILType.Greater, Greater },
+
+                    { ILCode.ILType.Duplicate, Duplicate },
+                    { ILCode.ILType.Drop, Drop }
                 };
         }
 
@@ -45,10 +58,6 @@ namespace FALSECompiler
             if (context.IsStackUsed)
             {
                 _stackField = type.DefineField("stack", typeof(int[]), FieldAttributes.Private | FieldAttributes.Static);
-
-                
- 
-
                 _stackPtrField = type.DefineField("ptr", typeof(int), FieldAttributes.Private | FieldAttributes.Static);    
             }
             
@@ -75,9 +84,16 @@ namespace FALSECompiler
 
         private void PushStack(ILGenerator g, ILCode code)
         {
-            g.Emit(OpCodes.Stloc_0);
+            g.Emit(OpCodes.Stloc_0, _tmpField);
             g.Emit(OpCodes.Ldsfld, _stackField);
-            g.Emit(OpCodes.Ldc_I4_0);
+
+            // Icrement stack pointer
+            g.Emit(OpCodes.Ldsfld, _stackPtrField);
+            g.Emit(OpCodes.Dup);            
+            g.Emit(OpCodes.Ldc_I4_1);
+            g.Emit(OpCodes.Add);
+            g.Emit(OpCodes.Stsfld, _stackPtrField);
+
             g.Emit(OpCodes.Ldloc_0);
             g.Emit(OpCodes.Stelem_I4);
         }
@@ -85,7 +101,14 @@ namespace FALSECompiler
         private void PopStack(ILGenerator g, ILCode code)
         {
             g.Emit(OpCodes.Ldsfld, _stackField);
-            g.Emit(OpCodes.Ldc_I4_0);
+
+            // Decrement stack pointer
+            g.Emit(OpCodes.Ldsfld, _stackPtrField);
+            g.Emit(OpCodes.Ldc_I4_1);
+            g.Emit(OpCodes.Sub);
+            g.Emit(OpCodes.Dup);
+            g.Emit(OpCodes.Stsfld, _stackPtrField);
+
             g.Emit(OpCodes.Ldelem_I4);
         }
     }

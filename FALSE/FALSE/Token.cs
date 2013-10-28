@@ -15,15 +15,15 @@
         Div,
         Neg,
         Eq,
-        Inv,
+        Not,
         And,
         Or,
         Gt,
         Dup,
         Drop,
-        Swap,
-        Rot,
-        Pick,
+        Swap, // TODO: Implement
+        Rot, // TODO: Implement
+        Pick, // TODO: Implement
         LoadVar,
         SaveVar,
         FuncStart,

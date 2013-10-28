@@ -10,7 +10,7 @@ namespace FALSE
             return new Tuple<IState, Token>
             (
                 States.Common,
-                c.into('\r', '\n', '\t', (char)0)
+                c.In('\r', '\n', '\t', (char)0)
                     ? new Token(OpCode.Error, "Symbol expected")
                     : new Token(OpCode.LoadChar)
             );

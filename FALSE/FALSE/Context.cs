@@ -7,7 +7,7 @@ namespace FALSE
     {
         public Context(IEnumerable<Token> program)
         {
-            var res = new List<List<Token>>(1) {new List<Token>()};
+            var res = new List<List<Token>>(1) { new List<Token>() };
             int max = 0, ptr = 0;
 
             ParseFunctions(program.ToArray(), ref ptr, 0, ref max, res);
@@ -32,10 +32,12 @@ namespace FALSE
                         res.Add(new List<Token>());
                         max++;
                         ParseFunctions(program, ref ptr, max, ref max, res);
-                        res[curFunc].Add(new Token(OpCode.FuncStart) {Arg = max});
+                        res[curFunc].Add(new Token(OpCode.FuncStart) { Arg = max });
                         break;
+
                     case OpCode.FuncEnd:
                         return;
+
                     default:
                         res[curFunc].Add(program[ptr]);
                         break;

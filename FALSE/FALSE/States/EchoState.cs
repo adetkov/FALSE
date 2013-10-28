@@ -10,7 +10,7 @@ namespace FALSE
     {
         public Tuple<IState, Token> Process(char c)
         {
-            return c.into('"', '\\', 'n', 't')
+            return c.In('"', '\\', 'n', 't')
                        ? new Tuple<IState, Token>(States.String, null)
                        : new Tuple<IState, Token>(States.String, new Token(OpCode.Error, String.Format("\\{0} is unknown symbol", c)));
         }

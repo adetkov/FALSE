@@ -1,21 +1,19 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
-    <Platform Condition=" '$(Platform)' == '' ">x86</Platform>
-    <ProductVersion>8.0.30703</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{840D09CB-334B-4B62-B600-AEDA7EC1B463}</ProjectGuid>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{CC7DA444-31AB-4712-ADDE-097A9D5F33D9}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>FALSECompiler</RootNamespace>
-    <AssemblyName>FALSECompiler</AssemblyName>
-    <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <RootNamespace>Tests</RootNamespace>
+    <AssemblyName>Tests</AssemblyName>
+    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
     <Optimize>false</Optimize>
@@ -24,8 +22,8 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
-  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|x86' ">
-    <PlatformTarget>x86</PlatformTarget>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <PlatformTarget>AnyCPU</PlatformTarget>
     <DebugType>pdbonly</DebugType>
     <Optimize>true</Optimize>
     <OutputPath>bin\Release\</OutputPath>
@@ -43,40 +41,20 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Compiler.Arithmetics.cs">
-      <DependentUpon>Compiler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Compiler.cs" />
-    <Compile Include="Compiler.IO.cs">
-      <DependentUpon>Compiler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Compiler.Logical.cs">
-      <DependentUpon>Compiler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Compiler.Stack.cs">
-      <DependentUpon>Compiler.cs</DependentUpon>
-    </Compile>
-    <Compile Include="ILCode.cs" />
     <Compile Include="Program.cs" />
-    <Compile Include="ProgramContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Translator.Arithmetics.cs">
-      <DependentUpon>Translator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Translator.cs" />
-    <Compile Include="Translator.IO.cs">
-      <DependentUpon>Translator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Translator.Logical.cs">
-      <DependentUpon>Translator.cs</DependentUpon>
-    </Compile>
-    <Compile Include="Translator.Stack.cs">
-      <DependentUpon>Translator.cs</DependentUpon>
-    </Compile>
+    <Compile Include="Test.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="App.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\FALSECompiler\FALSECompiler.csproj">
+      <Project>{840D09CB-334B-4B62-B600-AEDA7EC1B463}</Project>
+      <Name>FALSECompiler</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FALSE\FALSE.csproj">
-      <Project>{e093145e-beed-477e-9165-bb54b5abdb2e}</Project>
+      <Project>{E093145E-BEED-477E-9165-BB54B5ABDB2E}</Project>
       <Name>FALSE</Name>
     </ProjectReference>
   </ItemGroup>

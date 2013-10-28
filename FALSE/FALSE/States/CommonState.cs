@@ -26,7 +26,7 @@ namespace FALSE
             _arglessCodes.Add('>', OpCode.Gt);
             _arglessCodes.Add('&', OpCode.And);
             _arglessCodes.Add('|', OpCode.Or);
-            _arglessCodes.Add('~', OpCode.Inv);
+            _arglessCodes.Add('~', OpCode.Not);
 
             _arglessCodes.Add('$', OpCode.Dup);
             _arglessCodes.Add('%', OpCode.Drop);
@@ -51,7 +51,7 @@ namespace FALSE
                 .when<char>(_arglessCodes.ContainsKey).then(y => new FullState(this, new Token(_arglessCodes[c])))
                 .when<char>(x => x == '[').then(y => new FullState(this, new Token(OpCode.FuncStart)))
                 .when<char>(x => x == ']').then(y => new FullState(this, new Token(OpCode.FuncEnd)))
-                .when<char>(x => !x.into(' ', '\n', '\r', '\t')).then(y => new FullState(this, new Token(OpCode.Error, c.into(';', ':') ? "Variable expected" : "Unknown symbol")))
+                .when<char>(x => !x.In(' ', '\n', '\r', '\t')).then(y => new FullState(this, new Token(OpCode.Error, c.In(';', ':') ? "Variable expected" : "Unknown symbol")))
                 .anyway().then(y => new FullState(this, null))
             );
         }
