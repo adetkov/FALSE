@@ -8,13 +8,22 @@ namespace FALSECompiler
     {
         public ProgramContext(IEnumerable<Token> tokens)
         {
-            Main = Translator.Translate(tokens).ToArray();
+            var context = new Context(tokens);
+            Main = new Function(Translator.Translate(context.MainFunc).ToArray());
+            Funcs = context.Funcs
+                .Select(f => new Function(Translator.Translate(f).ToArray()))
+                .ToArray();
         }
 
         public bool IsStackUsed { get { return true; } }
 
-        public ILCode[] Main { get; private set; }
+        public uint Variables
+        {
+            get { return Main.Variables | Funcs.Aggregate(0U, (a, f) => a | f.Variables); }
+        }
 
-        public ILCode[][] Funcs { get; private set; }
+        public Function Main { get; private set; }
+
+        public Function[] Funcs { get; private set; }
     }
 }

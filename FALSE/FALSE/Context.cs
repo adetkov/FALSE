@@ -13,8 +13,7 @@ namespace FALSE
             ParseFunctions(program.ToArray(), ref ptr, 0, ref max, res);
             MainFunc = res[0].ToArray();
 
-            if (res.Count > 1)
-                Funcs = res.Skip(1).Select(x => x.ToArray()).ToArray();
+            Funcs = res.Count > 1 ? res.Skip(1).Select(x => x.ToArray()).ToArray() : new Token[0][];
         }
 
         public Token[][] Funcs { get; private set; }

@@ -3,7 +3,7 @@ using System.Linq;
 
 namespace Tests
 {
-    class Program
+    internal class Program
     {
         private static void Main()
         {
@@ -16,6 +16,10 @@ namespace Tests
                         .AddCase("0.", "0")
                         .AddCase("1 2 3.", "3")
                         .AddCase("1.2.3.", "123"),
+
+                    new Test("Load and write char")
+                        .AddCase("'a,", "a")
+                        .AddCase("'!'o'l'l'e'H,,,,,,", "Hello!"),
 
                     new Test("Write text")
                         .AddCase(@"""Hello!""", "Hello!")
@@ -86,6 +90,10 @@ namespace Tests
 
                     new Test("Drop")
                         .AddCase("1 2 3%..", "21"),
+
+                    new Test("Variables")
+                        .AddCase("10a:3 4+a;-.", "3")
+                        .AddCase("1a:2t:3z:z;t;a;...", "123"),
                 };
 
             if (tests.Aggregate(true, (s, t) => s & t.Run()))

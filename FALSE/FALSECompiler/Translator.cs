@@ -17,26 +17,32 @@ namespace FALSECompiler
                     // IO
                     { OpCode.PrintStr, ILWriteLine },
                     { OpCode.LoadConst, ILLoadNumber },
+                    { OpCode.LoadChar, ILLoadNumber },
                     { OpCode.PrintNum, ILWriteNumber },
                     { OpCode.PrintChar, ILWriteChar },
                     { OpCode.ReadChar, ILReadChar },
 
                     // Arithmetics
-
                     { OpCode.Neg, ILNegate },
                     { OpCode.Add, ILAdd },
                     { OpCode.Sub, ILSub },
                     { OpCode.Mul, ILMul },
                     { OpCode.Div, ILDivide },
 
+                    // Logical
                     { OpCode.Not, ILNot },
                     { OpCode.Eq, ILEqual },
                     { OpCode.And, ILAnd },
                     { OpCode.Or, ILOr },
                     { OpCode.Gt, ILGreater },
 
+                    // Stack
                     { OpCode.Dup, ILDuplicate },
-                    { OpCode.Drop, ILDrop }
+                    { OpCode.Drop, ILDrop },
+
+                    //Variables
+                    { OpCode.LoadVar, ILLoadVariable },
+                    { OpCode.SaveVar, ILStoreVariable },
                 };
         }
 

@@ -19,8 +19,7 @@ namespace FALSECompiler
 
         public static void WriteChar(ILGenerator g, ILCode code)
         {
-            g.Emit(OpCodes.Ldstr, (string)code.Tag);
-            g.Emit(OpCodes.Call, new Action<string>(Console.Write).Method);
+            g.Emit(OpCodes.Call, new Action<char>(Console.Write).Method);
         }
 
         public static void WriteNumber(ILGenerator g, ILCode code)

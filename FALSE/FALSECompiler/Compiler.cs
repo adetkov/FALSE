@@ -7,6 +7,8 @@ namespace FALSECompiler
 {
     public partial class Compiler
     {
+        private readonly Dictionary<int, FieldBuilder> _variables = new Dictionary<int, FieldBuilder>();
+
         private readonly Dictionary<ILCode.ILType, Action<ILGenerator, ILCode>> Map;
 
         private FieldBuilder _stackField;
@@ -25,6 +27,7 @@ namespace FALSECompiler
                     { ILCode.ILType.LoadNumber, LoadNumber },
                     { ILCode.ILType.WriteLine, WriteString },
                     { ILCode.ILType.WriteNumber, WriteNumber },
+                    { ILCode.ILType.WriteChar, WriteChar },
                     { ILCode.ILType.ReadChar, ReadChar },
 
                     { ILCode.ILType.Negate, Negate },
@@ -40,7 +43,10 @@ namespace FALSECompiler
                     { ILCode.ILType.Greater, Greater },
 
                     { ILCode.ILType.Duplicate, Duplicate },
-                    { ILCode.ILType.Drop, Drop }
+                    { ILCode.ILType.Drop, Drop },
+
+                    { ILCode.ILType.LoadVariable, LoadVariable },
+                    { ILCode.ILType.StoreVariable, StoreVariable }
                 };
         }
 
@@ -54,27 +60,33 @@ namespace FALSECompiler
             var mainMethod = type.DefineMethod("Main", MethodAttributes.HideBySig | MethodAttributes.Public | MethodAttributes.Static);
             assembly.SetEntryPoint(mainMethod, PEFileKinds.ConsoleApplication);
 
-
             if (context.IsStackUsed)
             {
-                _stackField = type.DefineField("stack", typeof(int[]), FieldAttributes.Private | FieldAttributes.Static);
-                _stackPtrField = type.DefineField("ptr", typeof(int), FieldAttributes.Private | FieldAttributes.Static);    
+                _stackField = CreateField<int>(type, "stack");
+                _stackPtrField = CreateField<int[]>(type, "ptr");
             }
-            
+
+            InitVariables(type, context);
+
             var ctorIl = mainMethod.GetILGenerator();
-            
+
             ctorIl.Emit(OpCodes.Ldc_I4, stackSize);
             ctorIl.Emit(OpCodes.Newarr, typeof(int));
             ctorIl.Emit(OpCodes.Stsfld, _stackField);
-            CompileMethod(ctorIl, context.Main);
+            CompileMethod(ctorIl, context.Main.Codes);
 
             type.CreateType();
             assembly.Save(name + ".exe");
         }
 
+        private static FieldBuilder CreateField<T>(TypeBuilder type, string name)
+        {
+            return type.DefineField(name, typeof(T), FieldAttributes.Private | FieldAttributes.Static);
+        }
+
         private void CompileMethod(ILGenerator gen, IEnumerable<ILCode> ilCodes)
         {
-            _tmpField = gen.DeclareLocal(typeof (int), false);
+            _tmpField = gen.DeclareLocal(typeof(int), false);
 
             foreach (var code in ilCodes)
             {
@@ -82,20 +94,17 @@ namespace FALSECompiler
             }
         }
 
-        private void PushStack(ILGenerator g, ILCode code)
+        private void InitVariables(TypeBuilder type, ProgramContext context)
         {
-            g.Emit(OpCodes.Stloc_0, _tmpField);
-            g.Emit(OpCodes.Ldsfld, _stackField);
-
-            // Icrement stack pointer
-            g.Emit(OpCodes.Ldsfld, _stackPtrField);
-            g.Emit(OpCodes.Dup);            
-            g.Emit(OpCodes.Ldc_I4_1);
-            g.Emit(OpCodes.Add);
-            g.Emit(OpCodes.Stsfld, _stackPtrField);
-
-            g.Emit(OpCodes.Ldloc_0);
-            g.Emit(OpCodes.Stelem_I4);
+            var variables = context.Variables;
+            int cnt = 0;
+            for (uint v = 1U; v <= 80000000U; v <<= 1, cnt++)
+            {
+                if ((variables & v) != 0)
+                {
+                    _variables[cnt] = CreateField<int>(type, ('a' + cnt).ToString());
+                }
+            }
         }
 
         private void PopStack(ILGenerator g, ILCode code)
@@ -110,6 +119,22 @@ namespace FALSECompiler
             g.Emit(OpCodes.Stsfld, _stackPtrField);
 
             g.Emit(OpCodes.Ldelem_I4);
+        }
+
+        private void PushStack(ILGenerator g, ILCode code)
+        {
+            g.Emit(OpCodes.Stloc_0, _tmpField);
+            g.Emit(OpCodes.Ldsfld, _stackField);
+
+            // Icrement stack pointer
+            g.Emit(OpCodes.Ldsfld, _stackPtrField);
+            g.Emit(OpCodes.Dup);
+            g.Emit(OpCodes.Ldc_I4_1);
+            g.Emit(OpCodes.Add);
+            g.Emit(OpCodes.Stsfld, _stackPtrField);
+
+            g.Emit(OpCodes.Ldloc_0);
+            g.Emit(OpCodes.Stelem_I4);
         }
     }
 }

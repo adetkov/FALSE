@@ -4,29 +4,32 @@
     {
         public enum ILType
         {
-            PopStack, // +
-            PushStack, // +
+            PopStack,
+            PushStack,
             
-            LoadNumber, // +
-            WriteLine, // +
-            WriteNumber, // +
+            LoadNumber,
+            WriteLine,
+            WriteNumber,
             WriteChar,
-            ReadChar, // +
+            ReadChar,
             
-            Negate, // +
-            Add, // +
-            Sub, // +
-            Mul, // +
-            Div, // +
+            Negate,
+            Add,
+            Sub,
+            Mul,
+            Div,
 
-            Not, // +
+            Not,
             Equal,
             And,
             Or,
             Greater,
 
             Duplicate,
-            Drop
+            Drop,
+
+            LoadVariable,
+            StoreVariable,
         }
         
         public ILCode(ILType type, object tag = null)

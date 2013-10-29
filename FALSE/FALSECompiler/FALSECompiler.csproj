@@ -56,6 +56,10 @@
     <Compile Include="Compiler.Stack.cs">
       <DependentUpon>Compiler.cs</DependentUpon>
     </Compile>
+    <Compile Include="Compiler.Variables.cs">
+      <DependentUpon>Compiler.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Function.cs" />
     <Compile Include="ILCode.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="ProgramContext.cs" />
@@ -73,8 +77,15 @@
     <Compile Include="Translator.Stack.cs">
       <DependentUpon>Translator.cs</DependentUpon>
     </Compile>
+    <Compile Include="Translator.Variables.cs">
+      <DependentUpon>Translator.cs</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\ExLibris\ExLibris\ExLibris.csproj">
+      <Project>{CB3807BA-5B52-42B7-8F82-3FA587496865}</Project>
+      <Name>ExLibris</Name>
+    </ProjectReference>
     <ProjectReference Include="..\FALSE\FALSE.csproj">
       <Project>{e093145e-beed-477e-9165-bb54b5abdb2e}</Project>
       <Name>FALSE</Name>
