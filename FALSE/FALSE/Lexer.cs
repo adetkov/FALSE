@@ -5,8 +5,8 @@ using System.Text;
 
 namespace FALSE
 {
-	public static class Lexer
-	{
+    public static class Lexer
+    {
         private static readonly Dictionary<String, String> EscapeMapping = new Dictionary<String, String>
         {
             { "\\\"", "\"" },
@@ -21,17 +21,17 @@ namespace FALSE
             { @"\0", "\0" }
         };
 
-		public static IEnumerable<Token> Tokenize(String ex)
-		{
-			var program = new List<Token>(ex.Length);
-			IState currentState = States.Common;  
-		    int prevPtr = -1;
+        public static IEnumerable<Token> Tokenize(String ex)
+        {
+            var program = new List<Token>(ex.Length);
+            IState currentState = States.Common;  
+            int prevPtr = -1;
 
-		    for (int ptr = 0; ptr <= ex.Length; ptr++)
-		    {
-		        var fullState = currentState.Process(ptr == ex.Length ? (char)0 : ex[ptr]);
-		        currentState = fullState.Item1;
-		        var token = fullState.Item2;
+            for (int ptr = 0; ptr <= ex.Length; ptr++)
+            {
+                var fullState = currentState.Process(ptr == ex.Length ? (char)0 : ex[ptr]);
+                currentState = fullState.Item1;
+                var token = fullState.Item2;
 
                 if (token != null)
                 {
@@ -44,12 +44,12 @@ namespace FALSE
                     prevPtr = ptr;
                     program.Add(token);
                 }
-		    }
+            }
 
             PostProcess(program);
 
-			return program;
-		}
+            return program;
+        }
 
         private static void PostProcess(IEnumerable<Token> tokens)
         {
@@ -76,5 +76,5 @@ namespace FALSE
                 }
             }
         }
-	}
+    }
 }

@@ -43,6 +43,10 @@ namespace FALSECompiler
                     //Variables
                     { OpCode.LoadVar, ILLoadVariable },
                     { OpCode.SaveVar, ILStoreVariable },
+
+                    // Functions
+                    { OpCode.FuncStart, ILPushFunction },
+                    { OpCode.Call, ILCodeFunction },
                 };
         }
 

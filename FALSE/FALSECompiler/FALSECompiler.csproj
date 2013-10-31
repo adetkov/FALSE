@@ -47,6 +47,9 @@
       <DependentUpon>Compiler.cs</DependentUpon>
     </Compile>
     <Compile Include="Compiler.cs" />
+    <Compile Include="Compiler.Functions.cs">
+      <DependentUpon>Compiler.cs</DependentUpon>
+    </Compile>
     <Compile Include="Compiler.IO.cs">
       <DependentUpon>Compiler.cs</DependentUpon>
     </Compile>
@@ -68,6 +71,9 @@
       <DependentUpon>Translator.cs</DependentUpon>
     </Compile>
     <Compile Include="Translator.cs" />
+    <Compile Include="Translator.Functions.cs">
+      <DependentUpon>Translator.cs</DependentUpon>
+    </Compile>
     <Compile Include="Translator.IO.cs">
       <DependentUpon>Translator.cs</DependentUpon>
     </Compile>

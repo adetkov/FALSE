@@ -30,6 +30,9 @@
 
             LoadVariable,
             StoreVariable,
+
+            PushFunction,
+            CallFunction,
         }
         
         public ILCode(ILType type, object tag = null)

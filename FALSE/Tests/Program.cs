@@ -94,12 +94,19 @@ namespace Tests
                     new Test("Variables")
                         .AddCase("10a:3 4+a;-.", "3")
                         .AddCase("1a:2t:3z:z;t;a;...", "123"),
+
+                    new Test("Functions")
+                        .AddCase("[2.]", "")
+                        .AddCase("[2.]!", "2")
+                        .AddCase("[2 3+]!3*.", "15")
+                        .AddCase("[1]![2 3-]!+.", "2")
+                        .AddCase(@"[""Hello""]a:[a;!"", World!""]!", "Hello, World!")
                 };
 
             if (tests.Aggregate(true, (s, t) => s & t.Run()))
             {
                 Console.ForegroundColor = ConsoleColor.Green;
-                Console.WriteLine("Succeed!");
+                Console.WriteLine("Succeeded!");
             }
 
             Console.ReadKey(true);

@@ -1,22 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
-using System.Reflection.Emit;
+﻿using System.Diagnostics;
 using FALSE;
 
 namespace FALSECompiler
 {
-	class Program
-	{
-		static void Main(string[] args)
-		{
-		    var program = @"100a:a;200b;b:";
-		    var tokens = Lexer.Tokenize(program);
-		    var c = new Compiler();
+    class Program
+    {
+        static void Main(string[] args)
+        {
+            var program = @"[1][2 3-]";
+            var tokens = Lexer.Tokenize(program);
+            var c = new Compiler();
             c.Compile("Debug1", 1024, new ProgramContext(tokens));
-		    Process.Start("Debug1.exe");
-		}
-	}
+            Process.Start("Debug1.exe");
+        }
+    }
 }

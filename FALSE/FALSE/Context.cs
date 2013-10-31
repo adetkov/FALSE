@@ -30,8 +30,9 @@ namespace FALSE
                     case OpCode.FuncStart:
                         res.Add(new List<Token>());
                         max++;
+                        ptr++;
                         ParseFunctions(program, ref ptr, max, ref max, res);
-                        res[curFunc].Add(new Token(OpCode.FuncStart) { Arg = max });
+                        res[curFunc].Add(new Token(OpCode.FuncStart) { Arg = max - 1 });
                         break;
 
                     case OpCode.FuncEnd:

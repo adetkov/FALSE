@@ -2,10 +2,10 @@
 
 namespace FALSE
 {
-	public class VariableState : IState
-	{
+    public class VariableState : IState
+    {
         public Tuple<IState, Token> Process(char c)
-		{
+        {
             switch (c)
             {
                 case ':': return new Tuple<IState, Token>(States.Common, new Token(OpCode.SaveVar));
@@ -13,6 +13,6 @@ namespace FALSE
                 case (char)0: return new Tuple<IState, Token>(States.Common, new Token(OpCode.Error, ": or ; expected"));
                 default: return new Tuple<IState, Token>(States.Common, new Token(OpCode.Error, ": or ; expected"));
             }
-		}
-	}
+        }
+    }
 }
