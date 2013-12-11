@@ -5,21 +5,19 @@ namespace FALSE
 {
 	public class VM
 	{
-	    private readonly IConsole _console;
 	    private readonly Dictionary<OpCode, Action<Context, Token, Stack>> _funcTable = new Dictionary<OpCode, Action<Context, Token, Stack>>();
 
         private readonly Variable[] _vars = new Variable[26];
 
         public VM(IConsole console)
         {
-            _console = console;
             _funcTable.Add(OpCode.Comment, (cx, c, s) => { });
 
-            _funcTable.Add(OpCode.LoadConst, (cx, c, s) => s.Push(c.Arg));
-            _funcTable.Add(OpCode.LoadChar, (cx, c, s) => s.Push(c.Arg, Stack.Type.Char));
+            _funcTable.Add(OpCode.LoadConst, (cx, c, s) => s.Push((int)c.Arg));
+            _funcTable.Add(OpCode.LoadChar, (cx, c, s) => s.Push((int)c.Arg, Stack.Type.Char));
 
             _funcTable.Add(OpCode.PrintNum, (cx, c, s) => console.Write(s.Pop()));
-            _funcTable.Add(OpCode.PrintStr, (cx, c, s) => console.Write(c.StringArg));
+            _funcTable.Add(OpCode.PrintStr, (cx, c, s) => console.Write((string)c.Arg));
             _funcTable.Add(OpCode.PrintChar, (cx, c, s) => console.Write((char)s.Pop()));
             _funcTable.Add(OpCode.ReadChar, (cx, c, s) => s.Push(console.Read()));
 
@@ -41,12 +39,13 @@ namespace FALSE
             _funcTable.Add(OpCode.Rot, (cx, c, s) => s.Rot());
             _funcTable.Add(OpCode.Pick, (cx, c, s) => s.Dup(s.Pop()));
 
-            _funcTable.Add(OpCode.SaveVar, (cx, c, s) => _vars[c.Arg].Value = s.PopRegister());
-            _funcTable.Add(OpCode.LoadVar, (cx, c, s) => s.PushRegister(_vars[c.Arg].Value));
+            _funcTable.Add(OpCode.SaveVar, (cx, c, s) => _vars[(int)c.Arg].Value = s.PopRegister());
+            _funcTable.Add(OpCode.LoadVar, (cx, c, s) => s.PushRegister(_vars[(int)c.Arg].Value));
 
-            _funcTable.Add(OpCode.Call, (cx, c, s) => Run(cx, cx.Funcs[c.Arg], s));
+            _funcTable.Add(OpCode.Call, (cx, c, s) => Run(cx, cx.Funcs[(int)c.Arg], s));
             _funcTable.Add(OpCode.If, (cx, c, s) =>
             {
+                Run(cx, new []{ (Token)c.Arg }, s);
                 int func = s.Pop();
                 if (s.Pop() != 0)
                     Run(cx, cx.Funcs[func], s);
@@ -54,6 +53,8 @@ namespace FALSE
 
             _funcTable.Add(OpCode.Loop, (cx, c, s) =>
             {
+                Run(cx, (Token[]) c.Arg, s);
+
                 int body = s.Pop();
                 int cond = s.Pop();
 

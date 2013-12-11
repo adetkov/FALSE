@@ -39,7 +39,7 @@ namespace FALSE
                     token.Position = ptr;
 
                     if (token.Type != OpCode.Error)
-                        token.StringArg = ex.Substring(prevPtr + 1, ptr - prevPtr);
+                        token.Arg = ex.Substring(prevPtr + 1, ptr - prevPtr);
 
                     prevPtr = ptr;
                     program.Add(token);
@@ -58,20 +58,20 @@ namespace FALSE
                 switch (token.Type)
                 {
                     case OpCode.LoadConst:
-                        token.Arg = int.Parse(token.StringArg);
+                        token.Arg = int.Parse((string)token.Arg);
                         break;
                     case OpCode.LoadChar:
-                        token.Arg = token.StringArg[1];
+                        token.Arg = ((String)token.Arg)[1];
                         break;
                     case OpCode.PrintStr:
-                        var strBld = new StringBuilder(token.StringArg);
+                        var strBld = new StringBuilder((string)token.Arg);
                         foreach (var pair in EscapeMapping)
                             strBld.Replace(pair.Key, pair.Value);
-                        token.StringArg = strBld.Length > 2 ? strBld.ToString(1, strBld.Length - 2) : "";
+                        token.Arg = strBld.Length > 2 ? strBld.ToString(1, strBld.Length - 2) : "";
                         break;
                     case OpCode.LoadVar:
                     case OpCode.SaveVar:
-                        token.Arg = token.StringArg[0] - 'a';
+                        token.Arg = ((string)token.Arg)[0] - 'a';
                         break;
                 }
             }

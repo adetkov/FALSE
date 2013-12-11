@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using ExLibris;
 
 namespace FALSE
 {
@@ -9,6 +8,8 @@ namespace FALSE
     public class CommonState : IState
     {
         private static readonly Dictionary<char, OpCode> ArglessCodes = new Dictionary<char, OpCode>();
+        private static readonly HashSet<char> WrongSymbols = new HashSet<char>(new[] {' ', '\n', '\r', '\t'}); 
+
 
         static CommonState()
         {
@@ -60,9 +61,9 @@ namespace FALSE
                 case ']': return new FullState(this, new Token(OpCode.FuncEnd));
             }
 
-            if (!c.In(' ', '\n', '\r', '\t'))
+            if (!WrongSymbols.Contains(c))
             {
-                return new FullState(this, new Token(OpCode.Error, c.In(';', ':')
+                return new FullState(this, new Token(OpCode.Error, c==';' || c == ':'
                                          ? "Variable expected"
                                          : "Unknown symbol"));
             }

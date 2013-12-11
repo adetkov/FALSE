@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using FALSE;
 
 namespace FALSECompiler
 {
     public partial class Translator
     {
-        private static IEnumerable<ILCode> ILDuplicate(Token token)
+        private static IEnumerable<ILCode> ILDuplicate()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.Duplicate);
@@ -13,10 +12,19 @@ namespace FALSECompiler
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILDrop(Token arg)
+        private static IEnumerable<ILCode> ILDrop()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.Drop);
+        }
+
+        private static IEnumerable<ILCode> ILSwap()
+        {
+            yield return new ILCode(ILCode.ILType.PopStack);
+            yield return new ILCode(ILCode.ILType.PopStack);
+            yield return new ILCode(ILCode.ILType.Swap);
+            yield return new ILCode(ILCode.ILType.PushStack);
+            yield return new ILCode(ILCode.ILType.PushStack);
         }
     }
 }

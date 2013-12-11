@@ -20,9 +20,9 @@ namespace FALSECompiler
                 .GetType("System.Action")
                 .GetMethod("Invoke", BindingFlags.Instance | BindingFlags.Public);
 
-            g.Emit(OpCodes.Stloc, _tmpFields[g]);
+            g.Emit(OpCodes.Stloc, _tmpFields[g].Item1);
             g.Emit(OpCodes.Ldsfld, _funcTable);
-            g.Emit(OpCodes.Ldloc, _tmpFields[g]);
+            g.Emit(OpCodes.Ldloc, _tmpFields[g].Item1);
             g.Emit(OpCodes.Ldelem_Ref);
             g.Emit(OpCodes.Callvirt, invoke);
         }

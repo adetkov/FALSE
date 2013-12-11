@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace FALSE
@@ -25,6 +26,7 @@ namespace FALSE
         {
             for (; ptr < program.Count; ptr++)
             {
+                var lastIndex = res[curFunc].Count - 1;
                 switch (program[ptr].Type)
                 {
                     case OpCode.FuncStart:
@@ -37,6 +39,19 @@ namespace FALSE
 
                     case OpCode.FuncEnd:
                         return;
+
+                    case OpCode.If:
+                        program[ptr].Arg = res[curFunc][lastIndex];
+                        res[curFunc].RemoveAt(lastIndex);
+                        res[curFunc].Add(program[ptr]);
+                        break;
+
+                    case OpCode.Loop:
+                        program[ptr].Arg = new[] { res[curFunc][lastIndex - 1], res[curFunc][lastIndex] };
+                        res[curFunc].RemoveAt(lastIndex);
+                        res[curFunc].RemoveAt(lastIndex - 1);
+                        res[curFunc].Add(program[ptr]);
+                        break;
 
                     default:
                         res[curFunc].Add(program[ptr]);

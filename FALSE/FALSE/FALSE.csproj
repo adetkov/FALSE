@@ -36,11 +36,6 @@
   <ItemGroup>
     <Reference Include="System" />
     <Reference Include="System.Core" />
-    <Reference Include="System.Xml.Linq" />
-    <Reference Include="System.Data.DataSetExtensions" />
-    <Reference Include="Microsoft.CSharp" />
-    <Reference Include="System.Data" />
-    <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="IConsole.cs" />
@@ -62,12 +57,6 @@
     <Compile Include="States\VariableState.cs" />
     <Compile Include="States\StringState.cs" />
     <Compile Include="VM.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\ExLibris\ExLibris\ExLibris.csproj">
-      <Project>{cb3807ba-5b52-42b7-8f82-3fa587496865}</Project>
-      <Name>ExLibris</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

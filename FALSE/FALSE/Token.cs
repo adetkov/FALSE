@@ -44,15 +44,10 @@
         public Token(OpCode code, string arg)
             : this(code)
         {
-            StringArg = arg;
+            Arg = arg;
         }
 
         public int Position { get; set; }
-
-        public string StringArg
-        {
-            get; set;
-        }
 
         public OpCode Type
         {
@@ -60,6 +55,6 @@
             private set;
         }
 
-        public int Arg { get; set; }
+        public object Arg { get; set; }
     }
 }

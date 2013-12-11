@@ -11,13 +11,13 @@ namespace FALSECompiler
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILReadChar(Token arg)
+        private static IEnumerable<ILCode> ILReadChar()
         {
             yield return new ILCode(ILCode.ILType.ReadChar);
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILWriteChar(Token token)
+        private static IEnumerable<ILCode> ILWriteChar()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.WriteChar);
@@ -25,9 +25,9 @@ namespace FALSECompiler
 
         private static IEnumerable<ILCode> ILWriteLine(Token token)
         {
-            yield return new ILCode(ILCode.ILType.WriteLine, token.StringArg);
+            yield return new ILCode(ILCode.ILType.WriteLine, token.Arg);
         }
-        private static IEnumerable<ILCode> ILWriteNumber(Token token)
+        private static IEnumerable<ILCode> ILWriteNumber()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.WriteNumber);

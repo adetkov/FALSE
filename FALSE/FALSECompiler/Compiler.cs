@@ -9,23 +9,21 @@ namespace FALSECompiler
 {
     public partial class Compiler
     {
+        private readonly Dictionary<ILCode.ILType, Action<ILGenerator, ILCode>> _map;
+
+        private readonly Dictionary<ILGenerator, Tuple<LocalBuilder, LocalBuilder>> _tmpFields
+            = new Dictionary<ILGenerator, Tuple<LocalBuilder, LocalBuilder>>();
+
         private readonly Dictionary<int, FieldBuilder> _variables = new Dictionary<int, FieldBuilder>();
-
-        private readonly Dictionary<ILCode.ILType, Action<ILGenerator, ILCode>> Map;
-
+        private int _funcPtr;
+        private FieldBuilder _funcTable;
         private FieldBuilder _stackField;
 
         private FieldBuilder _stackPtrField;
 
-        private readonly Dictionary<ILGenerator, LocalBuilder> _tmpFields = new Dictionary<ILGenerator, LocalBuilder>();
-
-        private FieldBuilder _funcTable;
-        private int _funcPtr = 0;
-
-
         public Compiler()
         {
-            Map = new Dictionary<ILCode.ILType, Action<ILGenerator, ILCode>>
+            _map = new Dictionary<ILCode.ILType, Action<ILGenerator, ILCode>>
                 {
                     { ILCode.ILType.PopStack, PopStack },
                     { ILCode.ILType.PushStack, PushStack },
@@ -50,12 +48,17 @@ namespace FALSECompiler
 
                     { ILCode.ILType.Duplicate, Duplicate },
                     { ILCode.ILType.Drop, Drop },
+                    { ILCode.ILType.Swap, Swap },
 
                     { ILCode.ILType.LoadVariable, LoadVariable },
                     { ILCode.ILType.StoreVariable, StoreVariable },
 
                     { ILCode.ILType.PushFunction, PushFunction },
                     { ILCode.ILType.CallFunction, CallFunction },
+
+                    { ILCode.ILType.Label, Label },
+                    { ILCode.ILType.JumpIfFalse, JumpIfFalse },
+                    { ILCode.ILType.Jump, Jump },
                 };
         }
 
@@ -66,7 +69,6 @@ namespace FALSECompiler
 
             var module = assembly.DefineDynamicModule(name, name + ".exe");
             var type = module.DefineType("Program", TypeAttributes.Public | TypeAttributes.Class);
-
 
             if (context.IsStackUsed)
             {
@@ -83,7 +85,7 @@ namespace FALSECompiler
 
             var funcs = context.Funcs.Select(f => CreateFunction(type, f)).ToArray();
 
-            var mainMethod = type.DefineMethod("Main", MethodAttributes.HideBySig 
+            var mainMethod = type.DefineMethod("Main", MethodAttributes.HideBySig
                 | MethodAttributes.Public | MethodAttributes.Static);
             assembly.SetEntryPoint(mainMethod, PEFileKinds.ConsoleApplication);
             var ctorIl = mainMethod.GetILGenerator();
@@ -97,13 +99,12 @@ namespace FALSECompiler
             if (funcs.Length > 0)
             {
                 var actionConstructor =
-                    Type.GetType("System.Action").GetConstructor(new[] {typeof (object), typeof (IntPtr)});
+                    Type.GetType("System.Action").GetConstructor(new[] { typeof(object), typeof(IntPtr) });
 
                 ctorIl.Emit(OpCodes.Ldc_I4, funcs.Length);
                 ctorIl.Emit(OpCodes.Newarr, typeof(Action));
                 ctorIl.Emit(OpCodes.Stsfld, _funcTable);
-                
-                
+
                 for (int i = 0; i < funcs.Length; i++)
                 {
                     ctorIl.Emit(OpCodes.Ldsfld, _funcTable);
@@ -126,9 +127,23 @@ namespace FALSECompiler
             return type.DefineField(name, typeof(T), FieldAttributes.Private | FieldAttributes.Static);
         }
 
+        private void CompileMethod(ILGenerator gen, IEnumerable<ILCode> ilCodes)
+        {
+            _tmpFields[gen] = new Tuple<LocalBuilder, LocalBuilder>(
+                gen.DeclareLocal(typeof(int), false),
+                gen.DeclareLocal(typeof(int), false));
+
+            foreach (var code in ilCodes)
+            {
+                _map[code.Type](gen, code);
+            }
+
+            gen.Emit(OpCodes.Ret);
+        }
+
         private MethodBuilder CreateFunction(TypeBuilder type, Function function)
         {
-            var method = type.DefineMethod("Func_" + _funcPtr++, MethodAttributes.HideBySig 
+            var method = type.DefineMethod("Func_" + _funcPtr++, MethodAttributes.HideBySig
                 | MethodAttributes.Public | MethodAttributes.Static);
 
             var gen = method.GetILGenerator();
@@ -143,16 +158,6 @@ namespace FALSECompiler
             return method;
         }
 
-        private void CompileMethod(ILGenerator gen, IEnumerable<ILCode> ilCodes)
-        {
-            _tmpFields[gen] = gen.DeclareLocal(typeof(int), false);
-
-            foreach (var code in ilCodes)
-            {
-                Map[code.Type](gen, code);
-            }
-        }
-
         private void InitVariables(TypeBuilder type, ProgramContext context)
         {
             var variables = context.Variables;
@@ -161,7 +166,7 @@ namespace FALSECompiler
             {
                 if ((variables & v) != 0)
                 {
-                    _variables[cnt] = CreateField<int>(type, ('a' + cnt).ToString(CultureInfo.InvariantCulture));
+                    _variables[cnt] = CreateField<int>(type, ((char)('a' + cnt)).ToString(CultureInfo.InvariantCulture));
                 }
             }
         }
@@ -182,7 +187,7 @@ namespace FALSECompiler
 
         private void PushStack(ILGenerator g, ILCode code)
         {
-            g.Emit(OpCodes.Stloc_0, _tmpFields[g]);
+            g.Emit(OpCodes.Stloc_0, _tmpFields[g].Item1);
             g.Emit(OpCodes.Ldsfld, _stackField);
 
             // Icrement stack pointer

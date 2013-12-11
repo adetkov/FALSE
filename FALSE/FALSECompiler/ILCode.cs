@@ -6,13 +6,13 @@
         {
             PopStack,
             PushStack,
-            
+
             LoadNumber,
             WriteLine,
             WriteNumber,
             WriteChar,
             ReadChar,
-            
+
             Negate,
             Add,
             Sub,
@@ -27,14 +27,20 @@
 
             Duplicate,
             Drop,
+            Swap,
 
             LoadVariable,
             StoreVariable,
 
             PushFunction,
             CallFunction,
+
+            Label,
+            JumpIfFalse,
+            JumpIfTrue,
+            Jump,
         }
-        
+
         public ILCode(ILType type, object tag = null)
         {
             Tag = tag;

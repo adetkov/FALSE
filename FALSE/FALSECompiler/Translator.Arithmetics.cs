@@ -1,11 +1,10 @@
 ﻿using System.Collections.Generic;
-using FALSE;
 
 namespace FALSECompiler
 {
     public static partial class Translator
     {
-        private static IEnumerable<ILCode> ILAdd(Token token)
+        private static IEnumerable<ILCode> ILAdd()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.PopStack);
@@ -13,14 +12,14 @@ namespace FALSECompiler
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILNegate(Token token)
+        private static IEnumerable<ILCode> ILNegate()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.Negate);
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILSub(Token token)
+        private static IEnumerable<ILCode> ILSub()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.PopStack);
@@ -28,7 +27,7 @@ namespace FALSECompiler
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILMul(Token token)
+        private static IEnumerable<ILCode> ILMul()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.PopStack);
@@ -36,7 +35,7 @@ namespace FALSECompiler
             yield return new ILCode(ILCode.ILType.PushStack);
         }
 
-        private static IEnumerable<ILCode> ILDivide(Token token)
+        private static IEnumerable<ILCode> ILDivide()
         {
             yield return new ILCode(ILCode.ILType.PopStack);
             yield return new ILCode(ILCode.ILType.PopStack);

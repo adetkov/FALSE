@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Reflection;
 using System.Reflection.Emit;
 
@@ -8,7 +9,7 @@ namespace FALSECompiler
     {
         public static void LoadNumber(ILGenerator g, ILCode code)
         {
-            g.Emit(OpCodes.Ldc_I4, (int)code.Tag);
+            g.Emit(OpCodes.Ldc_I4, ((IConvertible)code.Tag).ToInt32(CultureInfo.InvariantCulture));
         }
 
         public static void WriteString(ILGenerator g, ILCode code)

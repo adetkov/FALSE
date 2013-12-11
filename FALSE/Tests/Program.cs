@@ -91,6 +91,9 @@ namespace Tests
                     new Test("Drop")
                         .AddCase("1 2 3%..", "21"),
 
+                    new Test("Swap")
+                        .AddCase("1 2\\..", "12"),
+
                     new Test("Variables")
                         .AddCase("10a:3 4+a;-.", "3")
                         .AddCase("1a:2t:3z:z;t;a;...", "123"),
@@ -100,7 +103,19 @@ namespace Tests
                         .AddCase("[2.]!", "2")
                         .AddCase("[2 3+]!3*.", "15")
                         .AddCase("[1]![2 3-]!+.", "2")
-                        .AddCase(@"[""Hello""]a:[a;!"", World!""]!", "Hello, World!")
+                        .AddCase(@"[""Hello""]a:[a;!"", World!""]!", "Hello, World!"),
+
+                    new Test("If")
+                        .AddCase(@"1 0=[""Hi, ""]?""all""", "all")
+                        .AddCase(@"1 1=[""Hi, ""]?""all""", "Hi, all"),
+
+                    new Test("While")
+                        .AddCase(@"[0][""Hi, ""]#""all""", "all")
+                        .AddCase(@"1a:[a;][0a:""Test""]#", "Test")
+                        .AddCase("4a:[0a;>][1a;$.-a:]#", "4321"),
+
+                    new Test("Comments")
+                        .AddCase("1.(1 2+.)2.", "12"), 
                 };
 
             if (tests.Aggregate(true, (s, t) => s & t.Run()))
